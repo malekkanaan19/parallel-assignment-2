@@ -1,0 +1,64 @@
+#include <stdio.h>
+#include <omp.h>
+
+#define M 10// can make the size 3 for m n p i did that for the first calculation
+#define N 10
+#define P 10
+int A[M][N] = { {1, 2, 3,5,6,7,8,9,6,4},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {7, 8, 9,3,2,1,5,4,6,7},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+};
+
+int B[N][P] = { {1, 2, 3,5,6,7,8,9,6,4},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {7, 8, 9,3,2,1,5,4,6,7},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+                {4, 5, 6,4,5,6,7,8,9,1},
+    
+};
+
+int C[M][P];
+
+int main() {
+    double start_time = omp_get_wtime();
+    printf("Max threads: %d\n", omp_get_max_threads());
+    #pragma omp parallel for
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < P; j++) {
+            int result = 0;
+
+            for (int k = 0; k < N; k++) {
+                result += A[i][k] * B[k][j];
+            }
+
+            C[i][j] = result;
+        }
+    }
+
+    double end_time = omp_get_wtime();
+    double elapsed_time = end_time - start_time;
+
+    printf("Result:\n");
+    for (int i = 0; i < M; i++) {
+        for (int j = 0; j < P; j++) {
+            printf("%d ", C[i][j]);
+        }
+        printf("\n");
+    }
+
+    printf("Elapsed time: %f seconds\n", elapsed_time);
+
+    return 0;
+}
